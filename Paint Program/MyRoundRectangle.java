@@ -1,0 +1,63 @@
+/* Name: Aaron Leung
+ * Date: May 29, 2016
+ * Subject: Round Rectangle Class
+ */
+
+
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.BasicStroke;
+import java.awt.GradientPaint;
+import java.awt.geom.RoundRectangle2D;
+
+public class MyRoundRectangle extends MyBoundedShape
+{
+  
+    //This method is a constructor. It takes the coordinates, the color and the filled status as parameters and runs the MyBoundedShape constructor with those parameters
+    public MyRoundRectangle(int x1, int y1, int x2, int y2, Color color, boolean gradientStatus, Color secondColor, float strokeWidth, boolean dashed, float strokeDashLength, boolean filled)
+    {
+        super(x1, y1, x2, y2, color, gradientStatus, secondColor, strokeWidth, dashed, strokeDashLength, filled);
+    } 
+    
+    //This method is the constructor without parameters. It runs the MyBoundedShape constructor with no parameters 
+    public MyRoundRectangle()
+    {
+        super();
+    }
+    
+    //This method takes the graphics as a parameter. It draws the rectangle based on its properties
+    public void draw( Graphics g )
+    {
+        Graphics2D g2d = (Graphics2D) g;
+        
+        //gradient
+        if (getGradientStatus())
+        {
+            g2d.setPaint(new GradientPaint(getUpperLeftX(), getUpperLeftY(), getColor(), getUpperLeftX() + getWidth(), getUpperLeftY() + getHeight(), getSecondColor()));
+        }
+        else{
+            g2d.setColor( getColor());
+        }
+        
+        //filled
+        if (getFilled())
+        {
+            g2d.fill(new RoundRectangle2D.Double(getUpperLeftX(), getUpperLeftY(), getWidth(), getHeight(), 50, 50));
+        }
+        else{
+            //dashed
+            if (getDashedStatus())
+            {
+                float[] dashPattern = {getStrokeDashLength(), getStrokeDashLength()};
+                g2d.setStroke(new BasicStroke(getStrokeWidth(), BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10, dashPattern, 0));
+            }
+            else{
+                g2d.setStroke(new BasicStroke(getStrokeWidth()));
+            }
+                
+            g2d.draw(new RoundRectangle2D.Double(getUpperLeftX(), getUpperLeftY(), getWidth(), getHeight(), 50, 50));
+        }
+    } // end method draw
+} // end class MyRoundRectangle
